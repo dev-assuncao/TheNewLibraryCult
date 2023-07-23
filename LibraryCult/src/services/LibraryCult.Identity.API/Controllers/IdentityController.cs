@@ -2,6 +2,10 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.JsonWebTokens;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
 using static LibraryCult.Identity.API.Models.UserViewModel;
 
 namespace LibraryCult.Identity.API.Controllers
@@ -34,12 +38,12 @@ namespace LibraryCult.Identity.API.Controllers
 
             var user = new IdentityUser
             {
+                UserName = userRegister.Email,
                 Email = userRegister.Email,
-                PasswordHash = userRegister.Password,
                 EmailConfirmed = true
             };
 
-            var result = await _userManager.CreateAsync(user);
+            var result = await _userManager.CreateAsync(user, userRegister.Password);
 
             if (result.Succeeded)
             {
@@ -64,12 +68,12 @@ namespace LibraryCult.Identity.API.Controllers
             }
 
             var result = await _signInManager.PasswordSignInAsync(userLogin.Email,
-                                                                  userLogin.Password, false, true);
+                                                                  userLogin.Password, false, false);
 
             if (result.Succeeded)
             {
                 //gerar JWT
-                return Ok();
+                return CustomResponse(GenerateJWT());
             }
 
             if (result.IsLockedOut)
@@ -83,9 +87,21 @@ namespace LibraryCult.Identity.API.Controllers
         }
 
 
-        //public string Generate JsonWebToken()
-        //{
+        private string GenerateJWT()
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
 
-        //}
+            var key = Encoding.UTF8.GetBytes(_appSettings.Secret);
+
+            var token = tokenHandler.CreateToken(new SecurityTokenDescriptor
+            {
+                Audience = _appSettings.Audience,
+                Issuer = _appSettings.Issuer,
+                Expires = DateTime.UtcNow.AddHours(_appSettings.ExpirationTime),
+                SigningCredentials  = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
+            }) ;
+
+            return tokenHandler.WriteToken(token);
+        }
     }
 }

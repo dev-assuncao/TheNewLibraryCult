@@ -30,7 +30,7 @@ namespace LibraryCult.Identity.API.Configurations
 
             var appSettings = appSettingsSection.Get<JWT>();
 
-            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
+            var key = Encoding.UTF8.GetBytes(appSettings.Secret);
             //var key = 
 
             builder.Services.AddAuthentication(options =>

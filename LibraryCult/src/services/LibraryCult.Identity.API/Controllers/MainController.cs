@@ -9,32 +9,33 @@ namespace LibraryCult.Identity.API.Controllers
     {
         protected ICollection<string> Errors = new List<string>();
 
-
-
-
-
-        protected ActionResult CustomResponse(object result = null)
-        {
-            if (ValidOperation()) return Ok(result);
-
-            return BadRequest(new ValidationProblemDetails(new Dictionary<string, string[]>
-            {
-                {"Message", Errors.ToArray() }
-            }));
-
-        }
-
         protected bool ValidOperation()
         {
             return !Errors.Any();
         }
 
+        protected ActionResult CustomResponse(object result = null)
+        {
+            if (ValidOperation())
 
+                return Ok(
+                    new
+                    {
+                        sucess = true,
+                        data = result
+                    });
+
+            return BadRequest(new ValidationProblemDetails(new Dictionary<string, string[]>
+            {
+                {"Message", Errors.ToArray() }
+            }));
+        }
+  
         protected ActionResult CustomResponse(ModelStateDictionary modelState)
         {
             var errors = modelState.Values.SelectMany(x => x.Errors).ToList();
 
-            foreach(var erro in errors)
+            foreach (var erro in errors)
             {
                 AddProcessingError(erro.ErrorMessage);
             }
@@ -51,6 +52,6 @@ namespace LibraryCult.Identity.API.Controllers
         {
             Errors.Clear();
         }
-        
+
     }
 }

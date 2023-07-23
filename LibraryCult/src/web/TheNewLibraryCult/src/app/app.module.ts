@@ -8,13 +8,17 @@ import { MenuComponent } from './Navegation/menu/menu.component';
 import { rootRouterConfig } from './app.route';
 import { APP_BASE_HREF } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { LoginComponent } from './Authorization/login/login.component';
+import { RegisterComponent } from './Authorization/register/register.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     FooterComponent,
-    MenuComponent
+    MenuComponent,
+    LoginComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,

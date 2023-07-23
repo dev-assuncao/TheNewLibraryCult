@@ -1,0 +1,5 @@
+.content-container {
+    padding-top: 80px; /* altura do componente "nav" + algum espaço extra */
+    padding-bottom: 50px; /* altura do componente "footer" + algum espaço extra */
+    padding-left: 50px;
+  }
