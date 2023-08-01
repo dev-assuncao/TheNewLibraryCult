@@ -14,7 +14,7 @@ namespace LibraryCult.Identity.API.Controllers
             return !Errors.Any();
         }
 
-        protected ActionResult CustomResponse(object result = null)
+        protected ActionResult CustomResponse(object? result = null)
         {
             if (ValidOperation())
 
@@ -25,10 +25,18 @@ namespace LibraryCult.Identity.API.Controllers
                         data = result
                     });
 
-            return BadRequest(new ValidationProblemDetails(new Dictionary<string, string[]>
-            {
-                {"Message", Errors.ToArray() }
-            }));
+            return BadRequest(
+                new
+                {
+                    sucess = false,
+                    data = Errors.ToList()
+                }
+            );
+
+            //return BadRequest(new ValidationProblemDetails(new Dictionary<string, string[]>
+            //{
+            //    {"Message", Errors.ToArray() }
+            //}));
         }
   
         protected ActionResult CustomResponse(ModelStateDictionary modelState)
