@@ -24,6 +24,13 @@ namespace LibraryCult.Identity.API.Configurations
 
             builder.Services.AddScoped<LivraryContext>();
 
+            builder.Services.AddCors(opt =>
+            {
+                opt.AddPolicy("Allow requests", builder => builder.WithOrigins("http://localhost:4200/")
+                .AllowAnyOrigin()
+                .AllowAnyHeader());
+                
+            });
 
             var appSettingsSection = builder.Configuration.GetSection("JWT");
             builder.Services.Configure<JWT>(appSettingsSection);
@@ -58,6 +65,13 @@ namespace LibraryCult.Identity.API.Configurations
 
         public static IApplicationBuilder UseIdentityConfiguration(this IApplicationBuilder app)
         {
+            app.UseCors(opt => {
+                opt.AllowAnyMethod();
+                opt.AllowAnyOrigin();
+                opt.AllowAnyHeader();
+            });
+
+            app.UseCors("*");
             app.UseAuthentication();
             app.UseAuthorization();
             return app;

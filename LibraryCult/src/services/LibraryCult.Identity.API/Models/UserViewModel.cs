@@ -32,9 +32,12 @@ namespace LibraryCult.Identity.API.Models
 
         public class UserResponseViewModel
         {
+            public bool Status { get; set; }
+            public int StatusCode { get; set; }
             public string AccessToken { get; set; }
             public double ExpiresIn { get; set; }
             public UserToken UserToken { get; set; }
+            public IEnumerable<string> Errors { get; set; }
         }
 
         public class UserToken

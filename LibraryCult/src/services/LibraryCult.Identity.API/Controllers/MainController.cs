@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Collections.Generic;
+using LibraryCult.Identity.API.Models;
+using static LibraryCult.Identity.API.Models.UserViewModel;
 
 namespace LibraryCult.Identity.API.Controllers
 {
@@ -14,29 +16,22 @@ namespace LibraryCult.Identity.API.Controllers
             return !Errors.Any();
         }
 
-        protected ActionResult CustomResponse(object? result = null)
+        protected ActionResult CustomResponse(object result = null)
         {
             if (ValidOperation())
-
-                return Ok(
-                    new
-                    {
-                        sucess = true,
-                        data = result
-                    });
-
-            return BadRequest(
-                new
-                {
-                    sucess = false,
-                    data = Errors.ToList()
-                }
-            );
+                return Ok(result);
 
             //return BadRequest(new ValidationProblemDetails(new Dictionary<string, string[]>
             //{
             //    {"Message", Errors.ToArray() }
             //}));
+
+            return BadRequest(new UserResponseViewModel
+            {
+                Status = false,
+                Errors = Errors.ToArray(),
+                StatusCode = 400,               
+            });
         }
   
         protected ActionResult CustomResponse(ModelStateDictionary modelState)

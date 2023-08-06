@@ -6,8 +6,17 @@
       "name": "ng serve",
       "type": "chrome",
       "request": "launch",
+      "sourceMaps": true,
       "preLaunchTask": "npm: start",
-      "url": "http://localhost:4200/"
+      "webRoot": "${workspaceFolder}",
+      "url": "http://localhost:4200/",
+      "sourceMapPathOverrides": {
+        "webpack:/*": "${webRoot}/*",
+        "/./*": "${webRoot}/*",
+        "/src/*": "${webRoot}/src/*",
+        "/*": "*",
+        "/./~/*": "${workspaceFolder}/node_modules/*"
+      }
     },
     {
       "name": "ng test",

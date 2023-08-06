@@ -10,6 +10,9 @@ import { APP_BASE_HREF } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { LoginComponent } from './Authorization/login/login.component';
 import { RegisterComponent } from './Authorization/register/register.component';
+import {ReactiveFormsModule} from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { AuthenticationService } from './Services/AuthenticationService/authentication.service';
 
 @NgModule({
   declarations: [
@@ -22,12 +25,14 @@ import { RegisterComponent } from './Authorization/register/register.component';
   ],
   imports: [
     BrowserModule,
-    [RouterModule.forRoot(rootRouterConfig, {useHash:false}),
+    [RouterModule.forRoot(rootRouterConfig, {useHash:false})],
     FontAwesomeModule,
-  ]
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   providers: [
-    {provide: APP_BASE_HREF, useValue:'/'}
+    {provide: APP_BASE_HREF, useValue:'/'},
+    AuthenticationService
   ],
   bootstrap: [AppComponent]
 })

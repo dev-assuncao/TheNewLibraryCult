@@ -3,14 +3,14 @@
         <div class="card-header text-center">
             <h3>Login</h3>
         </div>
-        <form>
+        <form [formGroup]="form">
             <div class="card-body">
                 <div class="col-md-12">
                     <div class="form-outline mb-4">
                         <label for="email" class="form-label">
                             <h5>Email: </h5>
                         </label>
-                        <input for="email" type="password" class="form-control">
+                        <input for="email" type="text" class="form-control" formControlName="email">
                     </div>
                 </div>
                 <div class="col-md-12">
@@ -18,13 +18,13 @@
                         <label for="password" class="form-label">
                             <h5>Password: </h5>
                         </label>
-                        <input for="password" type="password" class="form-control">
+                        <input for="password" type="password" class="form-control" formControlName="password">
                     </div>
                 </div>
             </div>
             <div class="card-footer">             
                 <div class="form-outline mb-4">
-                    <button class="btn btn-success" style="width: 100%;" type="submit">Login</button>
+                    <button class="btn btn-success"  style="width: 100%;" type="submit" (click)="loginUser()">Login</button>
                 </div>
                 <p>Don't have a account? <a [routerLink]="['/register']">Register</a></p>
             </div>

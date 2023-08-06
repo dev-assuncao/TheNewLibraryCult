@@ -12,13 +12,13 @@ namespace LibraryCult.Identity.API.Controllers
 {
 
     [Route("api/[Controller]")]
-    public class IdentityController : MainController
+    public class AuthController : MainController
     {
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly JWT _appSettings;
 
-        public IdentityController(SignInManager<IdentityUser> signInManager,
+        public AuthController(SignInManager<IdentityUser> signInManager,
                                   UserManager<IdentityUser> userManager,
                                   IOptions<JWT> settings)
         {
@@ -47,7 +47,7 @@ namespace LibraryCult.Identity.API.Controllers
 
             if (result.Succeeded)
             {
-                return CustomResponse(GenerateJWT(userRegister.Email));
+                return CustomResponse(await GenerateJWT(userRegister.Email));
             }
 
             foreach (var erro in result.Errors)
@@ -72,7 +72,7 @@ namespace LibraryCult.Identity.API.Controllers
             if (result.Succeeded)
             {
                 //gerar JWT
-                return CustomResponse(GenerateJWT(userLogin.Email));
+                return CustomResponse(await GenerateJWT(userLogin.Email));
             }
 
             if (result.IsLockedOut)
@@ -144,6 +144,8 @@ namespace LibraryCult.Identity.API.Controllers
         {
             return new UserResponseViewModel
             {
+                Status = true,
+                StatusCode = 200,
                 AccessToken = token,
                 ExpiresIn = TimeSpan.FromHours(_appSettings.ExpirationTime).TotalSeconds,
                 UserToken = new UserToken
