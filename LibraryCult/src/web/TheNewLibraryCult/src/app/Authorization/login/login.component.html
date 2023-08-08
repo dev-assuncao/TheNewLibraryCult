@@ -1,16 +1,17 @@
 <div class="d-flex justify-content-center align-items-center vh-100">
     <div class="card" style="width: 20rem;">
-        <div class="card-header text-center">
+        <div class="card-header text-center">           
             <h3>Login</h3>
         </div>
-        <form [formGroup]="form">
+        <form [formGroup]="form" >
             <div class="card-body">
                 <div class="col-md-12">
                     <div class="form-outline mb-4">
                         <label for="email" class="form-label">
                             <h5>Email: </h5>
                         </label>
-                        <input for="email" type="text" class="form-control" formControlName="email">
+                        <input for="email" type="email" class="form-control" formControlName="email">
+                        <em *ngIf="validateControl('email') && hasError('email', 'required')">Email is required</em>
                     </div>
                 </div>
                 <div class="col-md-12">
@@ -19,12 +20,18 @@
                             <h5>Password: </h5>
                         </label>
                         <input for="password" type="password" class="form-control" formControlName="password">
+                        <em *ngIf="validateControl('password') && hasError('password', 'required')">Password is required, please inform.</em>
+                    </div>
+                    <div *ngIf="showError" class="alert alert-danger" role="alert">
+                        <div *ngFor="let error of errorMessage">
+                            <p>{{error}}</p>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="card-footer">             
                 <div class="form-outline mb-4">
-                    <button class="btn btn-success"  style="width: 100%;" type="submit" (click)="loginUser()">Login</button>
+                    <button class="btn btn-success"  style="width: 100%;" type="submit"  [disabled]="!form.valid"  (click)="loginUser()">Login</button>
                 </div>
                 <p>Don't have a account? <a [routerLink]="['/register']">Register</a></p>
             </div>

@@ -14,20 +14,28 @@ import { AuthenticationService } from 'src/app/Services/AuthenticationService/au
 export class LoginComponent implements OnInit {
   constructor(private authService: AuthenticationService) { }
 
+  errorMessage: Array<string> = new Array();
+  showError: boolean;
   form: FormGroup;
 
   ngOnInit(): void {
     this.form = new FormGroup({
       email: new FormControl("", [Validators.required]),
       password: new FormControl("", [Validators.required])
-    })
+    });
   }
 
   validateControl = (controlName: string) => {
-    return this.form.get(controlName)?.invalid && this.form.get(controlName)?.touched
+    return this.form.get(controlName).invalid && this.form.get(controlName).touched;
   }
 
+  hasError = (controlName: string, errorName: string) => {
+    return this.form.get(controlName).hasError(errorName);
+  }
+
+
   loginUser() {
+    this.showError = false;
     const val = this.form.value;
 
     const userLogin: ILogin = {
@@ -37,9 +45,14 @@ export class LoginComponent implements OnInit {
 
     this.authService.loginUserApi(userLogin)
       .subscribe({
-          next: (response) => console.log(response),
-          error: (response) => console.error(response),
-          complete: () => console.info('complete')
-        });
+        next: (response: UserResponseModel) => console.log(response),
+        error: (err: HttpErrorResponse) => {
+          for(let iError of err.error.errors){
+            this.errorMessage.push(iError);
+          }
+          this.showError = true;
+        },
+        complete: () => console.info('complete')
+      });
   }
 }
