@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, MaxValidator, MinLengthValidator, MinValidator, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ILogin } from 'src/app/Interfaces/UserForAuthentication';
 import { UserResponseModel } from 'src/app/Models/UserResponses/UserResponseModel';
@@ -32,7 +32,6 @@ export class LoginComponent implements OnInit {
   hasError = (controlName: string, errorName: string) => {
     return this.form.get(controlName).hasError(errorName);
   }
-
 
   loginUser() {
     this.showError = false;

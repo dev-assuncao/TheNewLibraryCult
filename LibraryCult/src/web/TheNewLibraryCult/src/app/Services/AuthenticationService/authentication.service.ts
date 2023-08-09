@@ -4,6 +4,8 @@ import {Observable, of} from 'rxjs';
 import { UserResponseModel } from '../../Models/UserResponses/UserResponseModel';
 import { ILogin } from '../../Interfaces/UserForAuthentication';
 
+const url = 'https://localhost:7161/api/Auth/';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -11,9 +13,12 @@ import { ILogin } from '../../Interfaces/UserForAuthentication';
 export class AuthenticationService {
   constructor(private http: HttpClient) { }
 
-  private url = 'https://localhost:7161/api/Auth/login';
-
     loginUserApi(login:ILogin) : Observable<UserResponseModel>{   
-      return this.http.post<UserResponseModel>(this.url,login);
+      return this.http.post<UserResponseModel>(url + 'login', login);
+    }
+
+
+    logoutUser() : Observable<UserResponseModel>{
+      return this.http.post<UserResponseModel>(url + 'logout', {});
     }
 }

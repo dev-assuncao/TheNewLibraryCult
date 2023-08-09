@@ -14,6 +14,8 @@ import {ReactiveFormsModule} from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthenticationService } from './Services/AuthenticationService/authentication.service';
 
+import {httpInterceptorProviders} from './_helpers/http.interceptor';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -32,7 +34,8 @@ import { AuthenticationService } from './Services/AuthenticationService/authenti
   ],
   providers: [
     {provide: APP_BASE_HREF, useValue:'/'},
-    AuthenticationService
+    AuthenticationService,
+    httpInterceptorProviders
   ],
   bootstrap: [AppComponent]
 })

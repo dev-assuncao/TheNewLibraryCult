@@ -85,6 +85,18 @@ namespace LibraryCult.Identity.API.Controllers
             return CustomResponse();
         }
 
+        [HttpPost("logout")]
+        public async Task<ActionResult<UserResponseViewModel>> Logout()
+        {
+            await _signInManager.SignOutAsync();
+
+            return new UserResponseViewModel
+            {
+                Status = true,
+                StatusCode = 200,
+                Message = "Logout with success!"
+            };
+        }
 
         private async Task<UserResponseViewModel> GenerateJWT(string userEmail)
         {

@@ -7,5 +7,6 @@ export class  UserResponseModel{
     public ExpiresIn:Number;
     public UserToken:UserTokenModel;
     public Errors : string[];
+    public Message:string;
 }
 

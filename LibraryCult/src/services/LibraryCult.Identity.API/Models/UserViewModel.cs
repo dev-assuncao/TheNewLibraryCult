@@ -38,6 +38,7 @@ namespace LibraryCult.Identity.API.Models
             public double ExpiresIn { get; set; }
             public UserToken UserToken { get; set; }
             public IEnumerable<string> Errors { get; set; }
+            public string Message { get; set; }
         }
 
         public class UserToken
