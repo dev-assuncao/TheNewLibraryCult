@@ -71,8 +71,19 @@ namespace LibraryCult.Identity.API.Controllers
 
             if (result.Succeeded)
             {
+
+                var response = await GenerateJWT(userLogin.Email);
+
+                var cookieOptions = new CookieOptions
+                {
+                    HttpOnly = true, 
+                    Secure = true,  
+                    SameSite = SameSiteMode.Lax 
+                };
+
+                Response.Cookies.Append("token", response.AccessToken, cookieOptions);
                 //gerar JWT
-                return CustomResponse(await GenerateJWT(userLogin.Email));
+                return CustomResponse(response);
             }
 
             if (result.IsLockedOut)

@@ -21,11 +21,6 @@ namespace LibraryCult.Identity.API.Controllers
             if (ValidOperation())
                 return Ok(result);
 
-            //return BadRequest(new ValidationProblemDetails(new Dictionary<string, string[]>
-            //{
-            //    {"Message", Errors.ToArray() }
-            //}));
-
             return BadRequest(new UserResponseViewModel
             {
                 Status = false,
