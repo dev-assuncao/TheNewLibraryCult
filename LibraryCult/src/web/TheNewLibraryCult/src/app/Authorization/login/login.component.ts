@@ -3,8 +3,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, MaxValidator, MinLengthValidator, MinValidator, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ILogin } from 'src/app/Interfaces/UserForAuthentication';
+import { UserClaimsModel } from 'src/app/Models/UserResponses/UserClaimsModel';
 import { UserResponseModel } from 'src/app/Models/UserResponses/UserResponseModel';
 import { AuthenticationService } from 'src/app/Services/AuthenticationService/authentication.service';
+import { StorageService } from 'src/app/Services/AuthenticationService/storage.service';
 
 @Component({
   selector: 'app-login',
@@ -12,17 +14,25 @@ import { AuthenticationService } from 'src/app/Services/AuthenticationService/au
   styles: [],
 })
 export class LoginComponent implements OnInit {
-  constructor(private authService: AuthenticationService) { }
+  constructor(private authService: AuthenticationService, private storageService : StorageService, private router: Router) { }
 
   errorMessage: Array<string> = new Array();
   showError: boolean;
   form: FormGroup;
-
+  isLoggedIn = false;
+  isLogginFailed = false;
+  roles: UserClaimsModel[] = [];
+  
   ngOnInit(): void {
     this.form = new FormGroup({
       email: new FormControl("", [Validators.required]),
       password: new FormControl("", [Validators.required])
     });
+
+    if(this.storageService.isLoggedIn()){
+      this.isLoggedIn = true;
+      this.roles = this.storageService.getUser().roles;
+    }
   }
 
   validateControl = (controlName: string) => {
@@ -44,14 +54,27 @@ export class LoginComponent implements OnInit {
 
     this.authService.loginUserApi(userLogin)
       .subscribe({
-        next: (response: UserResponseModel) => console.log(response),
+        next: (response: UserResponseModel) => {
+          this.storageService.saveUser(response.AccessToken);
+          this.isLogginFailed = false;
+          this.isLoggedIn = true;
+          this.roles = response.UserToken.Claims;
+          this.reloadPage();
+          this.router.navigate(['/home']);
+        },
         error: (err: HttpErrorResponse) => {
           for(let iError of err.error.errors){
             this.errorMessage.push(iError);
           }
+          this.isLogginFailed = true;
+          this.isLoggedIn = false;
           this.showError = true;
         },
         complete: () => console.info('complete')
       });
+  }
+
+  reloadPage():void{
+    window.location.reload();
   }
 }
