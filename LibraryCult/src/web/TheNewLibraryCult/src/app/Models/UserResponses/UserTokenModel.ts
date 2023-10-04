@@ -1,7 +1,7 @@
 import { UserClaimsModel } from "./UserClaimsModel";
 
 export class UserTokenModel {
-    public Id: string;
-    public Email: string;
-    public Claims: UserClaimsModel[];
+    public id: string;
+    public email: string;
+    public claims: UserClaimsModel[];
 }

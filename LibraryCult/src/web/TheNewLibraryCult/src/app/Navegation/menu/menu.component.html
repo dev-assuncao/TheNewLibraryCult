@@ -6,12 +6,18 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <div class="navbar-nav ml-3">
-                <a class="nav-link"[routerLink]="['/home']">Home</a>
+                <a class="nav-link" [routerLink]="['/home']">Home</a>
             </div>
-            <div class="navbar-nav ml-auto">
+
+            <div *ngIf="hasLogged" class="navbar-nav ml-auto">
+                <a class="nav-link" (click)="logOut()">LogOut</a>
+            </div>
+
+            <div *ngIf="!hasLogged" class="navbar-nav ml-auto">
                 <a class="nav-link" [routerLink]="['/register']"><fa-icon [icon]="faSignIn"></fa-icon> Register</a>
                 <a class="nav-link" [routerLink]="['/login']"><fa-icon [icon]="faUser"></fa-icon> Login</a>
             </div>
+            
         </div>
     </div>
 </nav>

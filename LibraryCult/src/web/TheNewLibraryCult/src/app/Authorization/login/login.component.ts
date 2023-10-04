@@ -55,12 +55,16 @@ export class LoginComponent implements OnInit {
     this.authService.loginUserApi(userLogin)
       .subscribe({
         next: (response: UserResponseModel) => {
-          this.storageService.saveUser(response.AccessToken);
+          this.storageService.saveUser(response.accessToken);
           this.isLogginFailed = false;
           this.isLoggedIn = true;
-          this.roles = response.UserToken.Claims;
+
+          for(let role of response.userToken.claims){
+            this.roles.push(role);
+          }
+          this.router.navigate(['home']);         
           this.reloadPage();
-          this.router.navigate(['/home']);
+          
         },
         error: (err: HttpErrorResponse) => {
           for(let iError of err.error.errors){
