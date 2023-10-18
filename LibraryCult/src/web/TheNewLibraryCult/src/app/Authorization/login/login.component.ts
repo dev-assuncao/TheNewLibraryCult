@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, MaxValidator, MinLengthValidator, MinValidator, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ILogin } from 'src/app/Interfaces/UserForAuthentication';
 import { UserClaimsModel } from 'src/app/Models/UserResponses/UserClaimsModel';
 import { UserResponseModel } from 'src/app/Models/UserResponses/UserResponseModel';
@@ -14,7 +14,10 @@ import { StorageService } from 'src/app/Services/AuthenticationService/storage.s
   styles: [],
 })
 export class LoginComponent implements OnInit {
-  constructor(private authService: AuthenticationService, private storageService : StorageService, private router: Router) { }
+  constructor(private authService: AuthenticationService, 
+              private storageService : StorageService, 
+              private router: Router,
+              private route: ActivatedRoute) { }
 
   errorMessage: Array<string> = new Array();
   showError: boolean;
@@ -32,6 +35,7 @@ export class LoginComponent implements OnInit {
     if(this.storageService.isLoggedIn()){
       this.isLoggedIn = true;
       this.roles = this.storageService.getUser().roles;
+      this.router.navigateByUrl('/home');   
     }
   }
 
@@ -56,20 +60,21 @@ export class LoginComponent implements OnInit {
       .subscribe({
         next: (response: UserResponseModel) => {
           this.storageService.saveUser(response.accessToken);
-          this.isLogginFailed = false;
-          this.isLoggedIn = true;
 
           for(let role of response.userToken.claims){
             this.roles.push(role);
           }
-          this.router.navigate(['home']);         
-          this.reloadPage();
-          
+
+          this.isLogginFailed = false;
+          this.isLoggedIn = true;
+          this.router.navigateByUrl('/home');             
         },
         error: (err: HttpErrorResponse) => {
-          for(let iError of err.error.errors){
-            this.errorMessage.push(iError);
-          }
+          if(err.error.erros !== null){
+            for(let iError of err.error.errors){
+              this.errorMessage.push(iError);
+            }
+          }        
           this.isLogginFailed = true;
           this.isLoggedIn = false;
           this.showError = true;
