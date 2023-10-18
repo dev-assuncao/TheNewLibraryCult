@@ -1,12 +1,12 @@
 import { UserTokenModel } from "./UserTokenModel";
 
 export class  UserResponseModel{
-    public Status:boolean;
-    public StatusCode:Number;
-    public AccessToken:string;
-    public ExpiresIn:Number;
-    public UserToken:UserTokenModel;
-    public Errors : string[];
-    public Message:string;
+    public status:boolean;
+    public statusCode:Number;
+    public accessToken:string;
+    public expiresIn:Number;
+    public userToken:UserTokenModel;
+    public errors : string[];
+    public message:string;
 }
 

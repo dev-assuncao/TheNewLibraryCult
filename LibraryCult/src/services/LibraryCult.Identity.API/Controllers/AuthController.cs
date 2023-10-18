@@ -74,14 +74,14 @@ namespace LibraryCult.Identity.API.Controllers
 
                 var response = await GenerateJWT(userLogin.Email);
 
-                var cookieOptions = new CookieOptions
-                {
-                    HttpOnly = true, 
-                    Secure = true,  
-                    SameSite = SameSiteMode.Lax 
-                };
+                //var cookieOptions = new CookieOptions
+                //{
+                //    HttpOnly = true, 
+                //    Secure = true,  
+                //    SameSite = SameSiteMode.Lax 
+                //};
 
-                Response.Cookies.Append("token", response.AccessToken, cookieOptions);
+                //Response.Cookies.Append("token", response.AccessToken, cookieOptions);
                 //gerar JWT
                 return CustomResponse(response);
             }

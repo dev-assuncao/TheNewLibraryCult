@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
+using System.Linq.Expressions;
 
 namespace LibraryCult.Identity.API.Configurations
 {
@@ -26,10 +27,12 @@ namespace LibraryCult.Identity.API.Configurations
 
             builder.Services.AddCors(opt =>
             {
-                opt.AddPolicy("Allow requests", builder => builder.WithOrigins("http://localhost:4200/")
-                .AllowAnyOrigin()
+                opt.AddPolicy("AllowRequests", builder => builder.WithOrigins("http://localhost:4200/")
+                .AllowAnyMethod()
+                .SetIsOriginAllowed(origin => true)
+                .AllowCredentials()
                 .AllowAnyHeader());
-                
+                             
             });
 
             var appSettingsSection = builder.Configuration.GetSection("JWT");
@@ -67,11 +70,12 @@ namespace LibraryCult.Identity.API.Configurations
         {
             app.UseCors(opt => {
                 opt.AllowAnyMethod();
-                opt.AllowAnyOrigin();
+                opt.SetIsOriginAllowed(origin => true);
+                opt.AllowCredentials();
                 opt.AllowAnyHeader();
             });
 
-            app.UseCors("*");
+            app.UseCors("AllowRequests");
             app.UseAuthentication();
             app.UseAuthorization();
             return app;

@@ -1,4 +1,4 @@
 export class UserClaimsModel {
-    public Value: string;
-    public Type: string;
+    public value: string;
+    public type: string;
 }
